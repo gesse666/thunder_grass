@@ -32,34 +32,12 @@ const handlePlaneClick = (id, currentColor) => {
       clear-color="#82DBC5"
       window-size
   >
-     Камера
-<!--    <TresPerspectiveCamera-->
+
     <TresPerspectiveCamera
-        :position="[3, 20, 3]"
+        :position="[0, 0, 15]"
         :look-at="[0, 0, 0]"
         :zoom="1"
     />
-
-    <!-- Камера: вид сверху -->
-<!--    <TresOrthographicCamera-->
-<!--        :position="[0, 5, 0]"-->
-<!--        :look-at="[0, 0, 0]"-->
-<!--        :zoom="20"-->
-<!--    />-->
-
-
-    <!--    &lt;!&ndash; Плоскости &ndash;&gt;-->
-<!--    <TresMesh-->
-<!--        v-for="plane in planeStore.planes"-->
-<!--        :key="plane.id"-->
-<!--        :position="plane.position"-->
-<!--        @click="() => handlePlaneClick(plane.id, plane.color)"-->
-<!--    >-->
-<!--      <TresPlaneGeometry :args="[1, 1]" />-->
-<!--      <TresMeshBasicMaterial :color="plane.color" />-->
-<!--    </TresMesh>-->
-
-
     <!-- Участки -->
     <TresMesh
         v-for="field in fieldStore.fields"

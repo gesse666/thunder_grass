@@ -19,7 +19,7 @@ export class Field {
     updateProperties(fertility, moisture, soilType) {
         this.fertility = fertility;
         this.moisture = moisture;
-        this.soilType = soilType;
+        // this.soilType = soilType;
         this.color = this.calculateColor();
     }
 }

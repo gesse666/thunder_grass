@@ -1,13 +1,10 @@
 <script setup lang="js">
-import { TresCanvas } from '@tresjs/core';
-import { ref } from 'vue';
+import { TresCanvas } from '@tresjs/core'
+import {useFieldStore} from "./stores/fieldStore.js";
+import { OrbitControls } from '@tresjs/cientos';
 
-import { usePlaneStore } from './stores/planeStore';
-const planeStore = usePlaneStore();
-
-import { useFieldStore } from './stores/fieldStore';
 const fieldStore = useFieldStore();
-fieldStore.initializeFields(5, 5); // Создаём 5x5 участков
+fieldStore.initializeFields(2,2); // Создаём 5x5 участков
 
 const handleFieldClick = (id) => {
   const field = fieldStore.fields.find((f) => f.id === id);
@@ -19,22 +16,14 @@ const handleFieldClick = (id) => {
   }
 };
 
-// const planeColor = ref('blue');
-
-const handlePlaneClick = (id, currentColor) => {
-  const newColor = currentColor === 'blue' ? 'red' : 'blue';
-  planeStore.updatePlaneColor(id, newColor);
-};
 </script>
 
 <template>
-  <TresCanvas
-      clear-color="#82DBC5"
-      window-size
-  >
+  <TresCanvas clear-color="#82DBC5" window-size>
+    <OrbitControls />
 
     <TresPerspectiveCamera
-        :position="[0, 0, 15]"
+        :position="[0, 0, 5]"
         :look-at="[0, 0, 0]"
         :zoom="1"
     />
@@ -51,13 +40,13 @@ const handlePlaneClick = (id, currentColor) => {
 
     <!-- Освещение -->
     <TresAmbientLight :intensity="1" />
+    <!--  <div style="position: absolute; top: 0;left: 50%;transform: translateX(-50%);padding-top: 30px;width: 100%;pointer-events: none">-->
+    <!--    <h2>Информация о плоскостях:</h2>-->
+    <!--    <ul>-->
+    <!--      <li v-for="field in fieldStore.fields" :key="field.id">-->
+    <!--        Плоскость {{ field.id }}: цвет {{ field.color }}-->
+    <!--      </li>-->
+    <!--    </ul>-->
+    <!--  </div>-->
   </TresCanvas>
-  <div>
-    <h2>Информация о плоскостях:</h2>
-    <ul>
-      <li v-for="plane in planeStore.planes" :key="plane.id">
-        Плоскость {{ plane.id }}: цвет {{ plane.color }}
-      </li>
-    </ul>
-  </div>
 </template>

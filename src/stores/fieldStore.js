@@ -9,11 +9,6 @@ export const useFieldStore = defineStore('fieldStore', {
         initializeFields(rows, cols) {
             this.fields = [];
             let id = 1;
-            // for (let x = 0; x < rows; x++) {
-            //     for (let z = 0; z < cols; z++) {
-            //         this.fields.push(new Field(id++, 50, 50, 'loam', [x, 0, z]));
-            //     }
-            // }
             for (let x = 0; x < rows; x++) {
                 for (let y = 0; y < cols; y++) {
                     this.fields.push(new Field(id++, 50, 50, 'loam', [x, y, 0]));

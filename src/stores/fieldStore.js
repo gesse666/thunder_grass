@@ -1,25 +1,37 @@
+// src/stores/fieldStore.js
 import { defineStore } from 'pinia';
-import {Field} from "../entities/Field.js";
+import Plant from '../models/Plant';
 
 export const useFieldStore = defineStore('fieldStore', {
     state: () => ({
-        fields: [], // Массив участков
+        fields: [],
     }),
     actions: {
         initializeFields(rows, cols) {
-            this.fields = [];
-            let id = 1;
-            for (let x = 0; x < rows; x++) {
-                for (let y = 0; y < cols; y++) {
-                    this.fields.push(new Field(id++, 50, 50, 'loam', [x, y, 0]));
-                }
+            let id = 0;
+            this.fields = Array.from({ length: rows * cols }, (_, index) => ({
+                id: id++,
+                position: [(index % cols) - cols / 2, -(Math.floor(index / cols)) + rows / 2, 0],
+                color: '#228B22',
+                fertility: Math.random() * 100,
+                moisture: Math.random() * 100,
+                soilType: 'loamy',
+                plant: null, // Ссылка на объект Plant
+            }));
+        },
+        plantSeed(fieldId, plantType) {
+            const field = this.fields.find((f) => f.id === fieldId);
+            if (field && !field.plant) {
+                field.plant = new Plant(plantType);
+                field.color = '#8B4513'; // Меняем цвет участка при посадке
             }
         },
-        updateField(id, fertility, moisture, soilType) {
-            const field = this.fields.find((field) => field.id === id);
-            if (field) {
-                field.updateProperties(fertility, moisture, soilType);
-            }
+        growPlantsStep() {
+            this.fields.forEach((field) => {
+                if (field.plant && !field.plant.isFullyGrown()) {
+                    field.plant.grow();
+                }
+            });
         },
     },
 });

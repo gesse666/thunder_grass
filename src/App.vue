@@ -2,17 +2,19 @@
 import { TresCanvas } from '@tresjs/core';
 import { useFieldStore } from './stores/fieldStore.js';
 import { OrbitControls } from '@tresjs/cientos';
+import Field from './components/Field.vue';
 
 const fieldStore = useFieldStore();
-fieldStore.initializeFields(5, 5); // Создаём 5x5 участков
+fieldStore.initializeFields(10, 10);
 
 const handleFieldClick = (fieldId) => {
-  fieldStore.plantSeed(fieldId, 'dandelion'); // Сажаем семя
+  fieldStore.plantSeed(fieldId, 'dandelion');
 };
 
 const nextStep = () => {
-  fieldStore.growPlantsStep(); // Переход на следующий шаг
+  fieldStore.growPlantsStep();
 };
+
 </script>
 
 <template>
@@ -29,25 +31,12 @@ const nextStep = () => {
           :look-at="[0, 0, 0]"
       />
       <!-- Участки -->
-      <TresMesh
+      <Field
           v-for="field in fieldStore.fields"
           :key="field.id"
-          :position="field.position"
-          @click="() => handleFieldClick(field.id)"
-      >
-        <TresPlaneGeometry :args="[1, 1]" />
-        <TresMeshBasicMaterial :color="field.color" />
-
-        <!-- Растение -->
-          <TresMesh
-              v-if="field.plant"
-              :position="[0, 0, 0.1]"
-          :scale="[field.plant.size, field.plant.size, field.plant.size]"
-          >
-          <TresSphereGeometry />
-          <TresMeshBasicMaterial color="yellow" />
-        </TresMesh>
-      </TresMesh>
+          :field="field"
+          :onClick="() => handleFieldClick(field.id)"
+      />
 
       <!-- Освещение -->
       <TresAmbientLight :intensity="1" />

@@ -4,7 +4,7 @@ export default class Plant {
         this.type = type; // Тип растения
         this.growthStage = growthStage; // Стадия роста
         this.maxGrowthStage = 5; // Максимальная стадия роста
-        this.size = 0.1; // Начальный размер семени
+        this.size = 0.9; // Начальный размер семени
     }
 
     grow() {

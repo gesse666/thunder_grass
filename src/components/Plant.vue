@@ -1,6 +1,6 @@
 <script setup lang="js">
 
-import DandelionSeedling from "./DandelionSeedling.vue";
+import Dandelion from "./Dandelion.vue";
 
 const props = defineProps({
   plant: Object,
@@ -8,5 +8,5 @@ const props = defineProps({
 </script>
 
 <template>
-  <DandelionSeedling :plant="plant" :position="[0, 0, 0.1]" :scale="[plant.size, plant.size, plant.size]" />
+  <Dandelion :plant="plant" :position="[0, 0, 0.1]" :scale="[plant.size, plant.size, plant.size]" />
 </template>

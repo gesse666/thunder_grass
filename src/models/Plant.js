@@ -1,4 +1,3 @@
-// src/models/Plant.js
 export default class Plant {
     constructor(type, growthStage = 0) {
         this.type = type; // Тип растения

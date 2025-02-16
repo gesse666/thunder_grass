@@ -1,7 +1,6 @@
 // stores/fieldStore.js
 import { defineStore } from 'pinia';
 import { reactive } from 'vue';
-import { usePlayerStore } from './playerStore.js';
 import Plant from '../models/Plant';
 
 export const useFieldStore = defineStore('fieldStore', () => {
@@ -17,7 +16,7 @@ export const useFieldStore = defineStore('fieldStore', () => {
             moisture: Math.random() * 100,
             soilType: 'loamy',
             plant: null,
-            playerId: null, // Игрок, который посадил растение
+            playerId: null,
         })));
     };
 
@@ -25,15 +24,8 @@ export const useFieldStore = defineStore('fieldStore', () => {
         const field = fields.find((f) => f.id === fieldId);
         if (field && !field.plant) {
             field.plant = reactive(new Plant(plantType));
-            field.playerId = playerId; // Привязываем растение к игроку
+            field.playerId = playerId;
             field.color = '#8B4513';
-
-            // Добавляем растение в список растений игрока
-            const playerStore = usePlayerStore();
-            playerStore.addPlantToPlayer(playerId, field.plant);
-
-            // Переход к следующему ходу
-            playerStore.nextTurn();
         }
     };
 

@@ -4,31 +4,29 @@ import { computed } from 'vue';
 import { TresCanvas } from '@tresjs/core';
 import { OrbitControls } from '@tresjs/cientos';
 
+import { useGameStore } from './stores/gameStore.js';
 import { useFieldStore } from './stores/fieldStore.js';
-import { usePlayerStore } from './stores/playerStore.js';
 
 import Field from './components/Field.vue';
-import InfoPanel from './components/InfoPanel.vue'; // Импортируем InfoPanel
+import InfoPanel from './components/InfoPanel.vue';
 
 const fieldStore = useFieldStore();
-const playerStore = usePlayerStore();
+const gameStore = useGameStore();
 
-// Инициализация
-fieldStore.initializeFields(10, 10);
-const player1 = playerStore.addPlayer('Игрок 1');
-const player2 = playerStore.addPlayer('Игрок 2');
+// Инициализация игры
+gameStore.initializeGame(10, 10, ['Игрок 1', 'Игрок 2']);
 
-// Текущий игрок
-const currentPlayer = computed(() => playerStore.getCurrentPlayer());
+console.log(gameStore);
+console.log('gameStore');
 
 // Обработка кликов
 const handleFieldClick = (fieldId) => {
-  fieldStore.plantSeed(fieldId, 'dandelion', currentPlayer.value.id);
+  gameStore.plantSeed(fieldId, 'dandelion');
 };
 
 // Следующий шаг
 const nextStep = () => {
-  fieldStore.growPlantsStep();
+  gameStore.nextStep();
 };
 </script>
 

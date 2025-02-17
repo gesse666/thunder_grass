@@ -1,16 +1,15 @@
 <!-- components/InfoPanel.vue -->
 <script setup lang="js">
 import { computed } from 'vue';
-import { usePlayerStore } from '../stores/playerStore.js';
+import { useGameStore } from '../stores/gameStore.js';
 
-const playerStore = usePlayerStore();
+const gameStore = useGameStore();
 
 // Текущий игрок
-const currentPlayer = computed(() => playerStore.getCurrentPlayer());
+const currentPlayer = computed(() => gameStore.getCurrentPlayer());
 
 // Следующий шаг
 const nextStep = () => {
-  // Вызов метода nextStep из хранилища или через emit
   emit('next-step');
 };
 
@@ -23,6 +22,7 @@ const emit = defineEmits(['next-step']);
   <h3>Текущий игрок: {{ currentPlayer.name }}</h3>
     <p>Цвет: <span :style="{ color: currentPlayer.color }">■</span></p>
     <p>Растений: {{ currentPlayer.plants.length }}</p>
+    <p>Состояние: {{ currentPlayer.planted ? 'Растение посажено' : 'Можно сажать' }}</p>
     <button @click="nextStep">Следующий шаг</button>
   </div>
 </template>

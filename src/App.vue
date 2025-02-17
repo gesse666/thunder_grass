@@ -5,19 +5,16 @@ import { TresCanvas } from '@tresjs/core';
 import { OrbitControls } from '@tresjs/cientos';
 
 import { useGameStore } from './stores/gameStore.js';
-import { useFieldStore } from './stores/fieldStore.js';
+import {useFieldStore} from "./stores/fieldStore.js";
 
 import Field from './components/Field.vue';
 import InfoPanel from './components/InfoPanel.vue';
 
-const fieldStore = useFieldStore();
+const fieldStore = useFieldStore()
 const gameStore = useGameStore();
 
 // Инициализация игры
 gameStore.initializeGame(10, 10, ['Игрок 1', 'Игрок 2']);
-
-console.log(gameStore);
-console.log('gameStore');
 
 // Обработка кликов
 const handleFieldClick = (fieldId) => {
@@ -28,6 +25,14 @@ const handleFieldClick = (fieldId) => {
 const nextStep = () => {
   gameStore.nextStep();
 };
+
+// Текущий игрок
+const currentPlayer = computed(() => gameStore.getCurrentPlayer());
+
+// Проверка, может ли игрок сажать растения
+const canPlant = computed(() => {
+  return currentPlayer.value && !currentPlayer.value.planted;
+});
 </script>
 
 <template>
@@ -49,7 +54,7 @@ const nextStep = () => {
           v-for="field in fieldStore.fields"
           :key="field.id"
           :field="field"
-          :onClick="() => handleFieldClick(field.id)"
+          :onClick="canPlant ? () => handleFieldClick(field.id) : null"
       />
 
       <!-- Освещение -->

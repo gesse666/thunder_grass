@@ -58,13 +58,13 @@ const canPlant = computed(() => {
       />
 
       <!-- Освещение -->
-      <TresAmbientLight :intensity="1" />
+      <TresAmbientLight :intensity="2.0" />
     </TresCanvas>
   </div>
 </template>
 
 <style>
-html, body, #app {
+html, body {
   margin: 0;
   padding: 0;
   width: 100%;

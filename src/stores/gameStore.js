@@ -1,4 +1,3 @@
-// stores/gameStore.js
 import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useFieldStore } from './fieldStore';
@@ -9,10 +8,14 @@ export const useGameStore = defineStore('gameStore', () => {
     const fieldStore = useFieldStore();
     const playerStore = usePlayerStore();
 
+    // Счётчик ходов в текущем раунде
+    let turnsInRound = 0;
+
     // Инициализация игры
     const initializeGame = (rows, cols, playerNames) => {
         fieldStore.initializeFields(rows, cols);
         playerNames.forEach((name) => playerStore.addPlayer(name));
+        turnsInRound = 0; // Сбрасываем счётчик ходов
     };
 
     // Посадка растения
@@ -27,14 +30,29 @@ export const useGameStore = defineStore('gameStore', () => {
 
                 // Добавляем растение в список растений игрока
                 playerStore.addPlantToPlayer(currentPlayer.id, field.plant);
+                currentPlayer.planted = true; // Отмечаем, что игрок посадил растение
             }
         }
     };
 
     // Следующий шаг игры
     const nextStep = () => {
-        playerStore.nextTurn(); // Переход к следующему игроку
-        fieldStore.growPlantsStep(); // Рост растений
+        const totalPlayers = playerStore.players.length; // Общее количество игроков
+        turnsInRound += 1; // Увеличиваем счётчик ходов
+
+        // Переход к следующему игроку
+        playerStore.nextTurn();
+
+        // Если все игроки походили (раунд завершён)
+        if (turnsInRound >= totalPlayers) {
+            fieldStore.growPlantsStep(); // Рост растений
+            turnsInRound = 0; // Сбрасываем счётчик для нового раунда
+
+            // Сбрасываем флаг planted для всех игроков
+            playerStore.players.forEach((player) => {
+                player.planted = false;
+            });
+        }
     };
 
     // Получение текущего игрока

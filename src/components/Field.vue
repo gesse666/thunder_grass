@@ -1,11 +1,14 @@
 <script setup>
 import { ref } from 'vue';
 import Plant from './Plant.vue';
+import * as THREE from 'three'; // Импортируем THREE для создания геометрии линий
 
 const props = defineProps({
   field: Object,
   onClick: Function,
 });
+
+console.log('Field ID:', props.field.id, 'Position:', props.field.position);
 
 const materialColor = ref(props.field.color);
 
@@ -17,19 +20,58 @@ const onLeave = () => {
   materialColor.value = props.field.color; // Возвращаем исходный цвет
 };
 
+// Определяем вершины для квадратной рамки размером 1.1 x 1.1 на высоте 0.21
+const frameSize = 1; // Размер рамки
+const frameHeight = 0.1; // Высота рамки над полем
+const halfSize = frameSize / 2;
+
+// Геометрия для каждой линии рамки
+const topLine = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3(-halfSize, halfSize, frameHeight),
+  new THREE.Vector3(halfSize, halfSize, frameHeight),
+]);
+const bottomLine = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3(-halfSize, -halfSize, frameHeight),
+  new THREE.Vector3(halfSize, -halfSize, frameHeight),
+]);
+const leftLine = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3(-halfSize, -halfSize, frameHeight),
+  new THREE.Vector3(-halfSize, halfSize, frameHeight),
+]);
+const rightLine = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3(halfSize, -halfSize, frameHeight),
+  new THREE.Vector3(halfSize, halfSize, frameHeight),
+]);
 </script>
 
 <template>
-  <TresMesh
-      :position="field.position"
-      @click="onClick"
-      @pointer-enter="onHover"
-      @pointer-leave="onLeave"
-  >
-  <TresBoxGeometry :args="[1, 1, .2]" />
-  <TresMeshBasicMaterial :color="materialColor" />
+  <TresGroup :position="field.position">
+    <!-- Основное поле -->
+    <TresMesh
+        :position="[0, 0, 0]"
+        @click="onClick"
+        @pointer-enter="onHover"
+        @pointer-leave="onLeave"
+    >
+      <TresBoxGeometry :args="[1, 1, 0.2]" />
+      <TresMeshBasicMaterial :color="materialColor" />
+    </TresMesh>
 
-  <!-- Растение, если есть -->
-  <Plant v-if="field.plant" :plant="field.plant" />
-  </TresMesh>
+    <!-- Красная квадратная рамка из четырёх линий -->
+    <TresLine :geometry="topLine">
+      <TresLineBasicMaterial color="#FF0000" :linewidth="20" />
+    </TresLine>
+    <TresLine :geometry="bottomLine">
+      <TresLineBasicMaterial color="#FF0000" :linewidth="20" />
+    </TresLine>
+    <TresLine :geometry="leftLine">
+      <TresLineBasicMaterial color="#FF0000" :linewidth="20" />
+    </TresLine>
+    <TresLine :geometry="rightLine">
+      <TresLineBasicMaterial color="#FF0000" :linewidth="20" />
+    </TresLine>
+
+    <!-- Растение, если есть -->
+    <Plant v-if="field.plant" :plant="field.plant" :position="[0, 0, 0.1]" />
+  </TresGroup>
 </template>

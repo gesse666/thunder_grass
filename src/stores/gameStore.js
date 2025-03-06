@@ -26,7 +26,7 @@ export const useGameStore = defineStore('gameStore', () => {
             if (field && !field.plant) {
                 field.plant = reactive(new Plant(plantType));
                 field.playerId = currentPlayer.id;
-                field.color = '#8B4513';
+                // field.color = '#8B4513';
 
                 // Добавляем растение в список растений игрока
                 playerStore.addPlantToPlayer(currentPlayer.id, field.plant);

@@ -7,23 +7,16 @@ const gameStore = useGameStore();
 
 // Текущий игрок
 const currentPlayer = computed(() => gameStore.getCurrentPlayer());
-
-// Следующий шаг
-const nextStep = () => {
-  emit('next-step');
-};
-
-// Если nextStep вызывается из родительского компонента, используем emit
 const emit = defineEmits(['next-step']);
 </script>
 
 <template>
   <div class="info_panel">
-  <h3>Текущий игрок: {{ currentPlayer.name }}</h3>
+    <h3>Текущий игрок: {{ currentPlayer.name }}</h3>
     <p>Цвет: <span :style="{ color: currentPlayer.color }">■</span></p>
     <p>Растений: {{ currentPlayer.plants.length }}</p>
     <p>Состояние: {{ currentPlayer.planted ? 'Растение посажено' : 'Можно сажать' }}</p>
-    <button @click="nextStep">Следующий шаг</button>
+    <button @click="$emit('next-step')">Следующий шаг</button>
   </div>
 </template>
 

@@ -1,3 +1,4 @@
+// models/Plant.js
 export default class Plant {
     constructor(type, growthStage = 0) {
         this.type = type; // Тип растения
@@ -6,9 +7,9 @@ export default class Plant {
         this.size = 0.9; // Начальный размер семени
     }
 
-    grow() {
+    grow(modifier = 1.0) { // Добавлен параметр modifier с дефолтным значением
         if (this.growthStage < this.maxGrowthStage) {
-            this.growthStage += 1;
+            this.growthStage = Math.min(this.maxGrowthStage, this.growthStage + modifier);
             this.size += 0.2; // Увеличиваем размер растения
         }
     }

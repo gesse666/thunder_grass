@@ -1,5 +1,5 @@
 <script setup lang="js">
-import { computed } from 'vue';
+import {computed} from 'vue';
 
 import { TresCanvas } from '@tresjs/core';
 import { OrbitControls } from '@tresjs/cientos';
@@ -9,6 +9,7 @@ import {useFieldStore} from "./stores/fieldStore.js";
 
 import Field from './components/Field.vue';
 import InfoPanel from './components/InfoPanel.vue';
+import FieldInfoPanel from "./components/FieldInfoPanel.vue";
 
 const fieldStore = useFieldStore()
 const gameStore = useGameStore();
@@ -40,6 +41,9 @@ const canPlant = computed(() => {
     <!-- Панель информации -->
     <InfoPanel @next-step="nextStep" />
 
+    <!-- Панель информации о подсвеченном поле -->
+    <FieldInfoPanel :hovered-field="gameStore.getHoveredField" />
+
     <!-- 3D-сцена -->
     <TresCanvas clear-color="#82DBC5" window-size>
       <OrbitControls />
@@ -55,6 +59,8 @@ const canPlant = computed(() => {
           :key="field.id"
           :field="field"
           :onClick="canPlant ? () => handleFieldClick(field.id) : null"
+          :onHover="fieldStore.setHoveredField"
+          :onLeave="fieldStore.clearHoveredField"
       />
 
       <!-- Освещение -->

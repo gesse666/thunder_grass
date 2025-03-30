@@ -6,6 +6,8 @@ import * as THREE from 'three'; // Импортируем THREE для созд�
 const props = defineProps({
   field: Object,
   onClick: Function,
+  onHover: Function, // Добавляем проп для наведения
+  onLeave: Function, // Добавляем проп для ухода курсора
 });
 
 console.log('Field ID:', props.field.id, 'Position:', props.field.position);
@@ -14,10 +16,12 @@ const materialColor = ref(props.field.color);
 
 const onHover = () => {
   materialColor.value = "#ffff99"; // Изменяем цвет при наведении
+  if (props.onHover) props.onHover(props.field); // Передаём поле в App.vue
 };
 
 const onLeave = () => {
   materialColor.value = props.field.color; // Возвращаем исходный цвет
+  if (props.onLeave) props.onLeave(); // Сбрасываем подсвеченное поле
 };
 
 // Определяем вершины для квадратной рамки размером 1.1 x 1.1 на высоте 0.21

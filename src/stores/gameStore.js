@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 import { useFieldStore } from './fieldStore';
 import { usePlayerStore } from './playerStore';
 import Plant from '../models/Plant';
@@ -60,6 +60,11 @@ export const useGameStore = defineStore('gameStore', () => {
         return playerStore.getCurrentPlayer();
     };
 
+    // Получение подсвеченного поля из fieldStore
+    const getHoveredField = computed(() => {
+        return fieldStore.hoveredField;
+    });
+
     // Получение полей текущего игрока
     const getPlayerFields = () => {
         const currentPlayer = playerStore.getCurrentPlayer();
@@ -74,6 +79,7 @@ export const useGameStore = defineStore('gameStore', () => {
         plantSeed,
         nextStep,
         getCurrentPlayer,
+        getHoveredField, // Экспортируем вычисляемое свойство
         getPlayerFields,
     };
 });

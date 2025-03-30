@@ -1,6 +1,6 @@
 // fieldStore.js
 import { defineStore } from 'pinia';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { Field } from '../models/Field';
 import Plant from '../models/Plant';
 import { SoilTypes} from "../models/SoilTypes.js";
@@ -17,6 +17,7 @@ const getRandomSoilType = () => {
 
 export const useFieldStore = defineStore('fieldStore', () => {
     const fields = reactive([]);
+    const hoveredField = ref(null);
 
     const initializeFields = (rows, cols) => {
         let id = 0;
@@ -56,10 +57,21 @@ export const useFieldStore = defineStore('fieldStore', () => {
         });
     };
 
+    const setHoveredField = (field) => {
+        hoveredField.value = field;
+    };
+
+    const clearHoveredField = () => {
+        hoveredField.value = null;
+    };
+
     return {
         fields,
+        hoveredField, // Экспортируем состояние
         initializeFields,
         plantSeed,
         growPlantsStep,
+        setHoveredField, // Экспортируем методы
+        clearHoveredField,
     };
 });

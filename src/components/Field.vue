@@ -10,7 +10,7 @@ const props = defineProps({
   onLeave: Function, // Добавляем проп для ухода курсора
 });
 
-console.log('Field ID:', props.field.id, 'Position:', props.field.position);
+// console.log('Field ID:', props.field.id, 'Position:', props.field.position);
 
 const materialColor = ref(props.field.color);
 

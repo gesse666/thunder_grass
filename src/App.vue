@@ -1,59 +1,55 @@
 <script setup lang="js">
-import {computed} from 'vue';
-
+import { computed, reactive, watch } from 'vue';
 import { TresCanvas } from '@tresjs/core';
 import { OrbitControls } from '@tresjs/cientos';
-
+import * as Tweakpane from 'tweakpane';
 import { useGameStore } from './stores/gameStore.js';
-import {useFieldStore} from "./stores/fieldStore.js";
-
+import { useFieldStore } from './stores/fieldStore.js';
 import Field from './components/Field.vue';
 import InfoPanel from './components/InfoPanel.vue';
-import FieldInfoPanel from "./components/FieldInfoPanel.vue";
+import FieldInfoPanel from './components/FieldInfoPanel.vue';
 
-const fieldStore = useFieldStore()
+const fieldStore = useFieldStore();
 const gameStore = useGameStore();
 
-// Инициализация игры
-gameStore.initializeGame(10, 10, ['Игрок 1', 'Игрок 2']);
+gameStore.initializeGame(4, 4, ['Игрок 1']);
 
-// Обработка кликов
 const handleFieldClick = (fieldId) => {
   gameStore.plantSeed(fieldId, 'dandelion');
 };
 
-// Следующий шаг
 const nextStep = () => {
   gameStore.nextStep();
 };
 
-// Текущий игрок
 const currentPlayer = computed(() => gameStore.getCurrentPlayer());
+const canPlant = computed(() => currentPlayer.value && !currentPlayer.value.planted);
 
-// Проверка, может ли игрок сажать растения
-const canPlant = computed(() => {
-  return currentPlayer.value && !currentPlayer.value.planted;
+const state = reactive({
+  clearColor: '#c0ffee',
+  wireframe: false
+});
+
+const pane = new Tweakpane.Pane();
+pane.addBinding(state, 'clearColor');
+pane.addBinding(state, 'wireframe');
+
+// Отслеживание изменений для отладки
+watch(() => state.clearColor, (newValue) => {
+  console.log('clearColor changed:', newValue);
+});
+watch(() => state.wireframe, (newValue) => {
+  console.log('wireframe changed:', newValue);
 });
 </script>
 
 <template>
   <div>
-    <!-- Панель информации -->
     <InfoPanel @next-step="nextStep" />
-
-    <!-- Панель информации о подсвеченном поле -->
     <FieldInfoPanel :hovered-field="gameStore.getHoveredField" />
-
-    <!-- 3D-сцена -->
-    <TresCanvas clear-color="#82DBC5" window-size>
+    <TresCanvas window-size :clear-color="state.clearColor">
       <OrbitControls />
-
-      <TresPerspectiveCamera
-          :position="[0, 5, 10]"
-          :look-at="[0, 0, 0]"
-      />
-
-      <!-- Участки -->
+      <TresPerspectiveCamera :position="[0, 5, 10]" :look-at="[0, 0, 0]" />
       <Field
           v-for="field in fieldStore.fields"
           :key="field.id"
@@ -62,12 +58,19 @@ const canPlant = computed(() => {
           :onHover="fieldStore.setHoveredField"
           :onLeave="fieldStore.clearHoveredField"
       />
-
-      <!-- Освещение -->
       <TresAmbientLight :intensity="2.0" />
     </TresCanvas>
   </div>
 </template>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>
 
 <style>
 html, body {

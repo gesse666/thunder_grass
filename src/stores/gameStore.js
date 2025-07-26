@@ -3,8 +3,13 @@ import { reactive, computed } from 'vue';
 import { useFieldStore } from './fieldStore';
 import { usePlayerStore } from './playerStore';
 import Plant from '../models/Plant';
+import {ref} from "vue";
 
 export const useGameStore = defineStore('gameStore', () => {
+    // game model
+    const gameStore = ref('')
+
+    // another models
     const fieldStore = useFieldStore();
     const playerStore = usePlayerStore();
 

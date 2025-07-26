@@ -1,5 +1,7 @@
 <script setup lang="js">
 import { computed, reactive, watch } from 'vue';
+import {computed} from 'vue';
+
 import { TresCanvas } from '@tresjs/core';
 import { OrbitControls } from '@tresjs/cientos';
 import * as Tweakpane from 'tweakpane';

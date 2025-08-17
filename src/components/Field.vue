@@ -24,7 +24,7 @@ const onLeave = () => {
   if (props.onLeave) props.onLeave(); // Сбрасываем подсвеченное поле
 };
 
-// Определяем вершины для квадратной рамки размером 1.1 x 1.1 на высоте 0.21
+// Определяем вершины для квадратной рамки размером 1 x 1 на высоте 0.21
 const frameSize = 1; // Размер рамки
 const frameHeight = 0.1; // Высота рамки над полем
 const halfSize = frameSize / 2;
@@ -52,17 +52,17 @@ const rightLine = new THREE.BufferGeometry().setFromPoints([
   <TresGroup :position="field.position">
     <!-- Основное поле -->
     <TresMesh
-        :position="[0, 0, 0]"
+        :position="[0, -0.1, 0]"
         @click="onClick"
         @pointer-enter="onHover"
         @pointer-leave="onLeave"
     >
-      <TresBoxGeometry :args="[1, 1, 0.2]" />
+      <TresBoxGeometry :args="[1, 0.2, 1]" />
       <TresMeshBasicMaterial :color="materialColor" />
     </TresMesh>
 
     <!-- Красная квадратная рамка из четырёх линий -->
-    <TresLine :geometry="topLine">
+    <!-- <TresLine :geometry="topLine">
       <TresLineBasicMaterial color="#FF0000" :linewidth="20" />
     </TresLine>
     <TresLine :geometry="bottomLine">
@@ -73,9 +73,9 @@ const rightLine = new THREE.BufferGeometry().setFromPoints([
     </TresLine>
     <TresLine :geometry="rightLine">
       <TresLineBasicMaterial color="#FF0000" :linewidth="20" />
-    </TresLine>
+    </TresLine> -->
 
     <!-- Растение, если есть -->
-    <Plant v-if="field.plant" :plant="field.plant" :position="[0, 0, 0.1]" />
+    <Plant v-if="field.plant" :plant="field.plant" :position="[0, 0, 0.2]" />
   </TresGroup>
 </template>

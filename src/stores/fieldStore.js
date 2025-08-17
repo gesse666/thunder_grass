@@ -25,7 +25,13 @@ export const useFieldStore = defineStore('fieldStore', () => {
             const soilType = getRandomSoilType();
             const baseFertility = SoilTypes[soilType].fertilityBase;
             const baseMoisture = SoilTypes[soilType].moistureBase;
-            const position = [(index % cols) - cols / 2, -(Math.floor(index / cols)) + rows / 2, 0];
+            const row = Math.floor(index / cols);
+            const col = index % cols;
+            const position = [
+                (col - (cols - 1) / 2), 
+                0,
+                (row - (rows - 1) / 2), 
+            ];
 
             return reactive(new Field(
                 id++,
@@ -36,6 +42,12 @@ export const useFieldStore = defineStore('fieldStore', () => {
             ));
         }));
         console.log('Fields initialized:', fields.length);
+        console.log('Field positions:', fields.map(f => ({ id: f.id, position: f.position })));
+        console.log('Expected positions for 2x2 grid:');
+        console.log('Field 0: [-0.5, -0.5, 0]');
+        console.log('Field 1: [0.5, -0.5, 0]');
+        console.log('Field 2: [-0.5, 0.5, 0]');
+        console.log('Field 3: [0.5, 0.5, 0]');
     };
 
     const plantSeed = (fieldId, plantType, playerId) => {

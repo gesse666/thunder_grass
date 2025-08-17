@@ -1,15 +1,9 @@
-<script setup>
+<script setup lang="js">
 import { ref } from 'vue';
-import { TresCanvas, useRenderLoop } from '@tresjs/core';
-// import { TresMesh, TresPlane, TresCylinder, TresSphere } from '@tresjs/components';
 
 const props = defineProps({
   plant: Object, // Растение
 });
-
-const leafMaterial = { color: '#3f9f4f' };
-const stemMaterial = { color: '#2f6f3f' };
-const flowerMaterial = { color: '#e6b8d2' };
 
 const leaves = ref([
   { position: [0.2, 0.5, 0], rotation: [0, 0, 0] },
@@ -24,27 +18,49 @@ const runners = ref([
 </script>
 
 <template>
-  <TresCanvas clear-color="#87ceeb">
-    <TresMesh  v-if="plant.growthStage === 0">
-      <!-- Стебель -->
-      <TresCylinder :args="[0.05, 0.05, 0.6, 8]" :position="[0, 0.3, 0]" :material="stemMaterial" />
+  <!-- Семя -->
+  <TresMesh v-if="plant.growthStage === 0" :position="[0, 0, 0.1]" :scale="[0.1, 0.1, 0.1]">
+    <TresSphereGeometry />
+    <TresMeshBasicMaterial color="brown" />
+  </TresMesh>
 
-      <!-- Листья -->
-      <TresPlane
-          v-for="(leaf, index) in leaves" :key="index"
-          :position="leaf.position" :rotation="leaf.rotation"
-          :args="[0.4, 0.4]" :material="leafMaterial"
-      />
+  <!-- Ростки -->
+  <TresMesh v-if="plant.growthStage === 1" :position="[0, 0, 0.1]" :scale="[plant.size, plant.size, plant.size]">
+    <TresCylinderGeometry :args="[0.02, 0.02, 0.2, 8]" />
+    <TresMeshBasicMaterial color="#2f6f3f" />
+  </TresMesh>
 
-      <!-- Ползучие побеги -->
-      <TresCylinder
-          v-for="(runner, index) in runners" :key="index"
-          :position="runner.position" :rotation="runner.rotation"
-          :args="[0.02, 0.02, 0.5, 6]" :material="stemMaterial"
-      />
+  <!-- Молодое растение -->
+  <TresMesh v-if="plant.growthStage === 2" :position="[0, 0, 0.2]" :scale="[plant.size, plant.size, plant.size]">
+    <TresCylinderGeometry :args="[0.03, 0.03, 0.4, 8]" />
+    <TresMeshBasicMaterial color="#2f6f3f" />
+  </TresMesh>
 
-      <!-- Цветок -->
-      <TresSphere :args="[0.1, 8, 8]" :position="[0, 0.65, 0]" :material="flowerMaterial" />
-    </TresMesh>
-  </TresCanvas>
+  <!-- Взрослое растение со стеблем -->
+  <TresMesh v-if="plant.growthStage >= 3" :position="[0, 0, 0.3]" :scale="[plant.size, plant.size, plant.size]">
+    <TresCylinderGeometry :args="[0.05, 0.05, 0.6, 8]" />
+    <TresMeshBasicMaterial color="#2f6f3f" />
+  </TresMesh>
+
+  <!-- Листья для взрослого растения -->
+  <TresMesh v-if="plant.growthStage >= 3" v-for="(leaf, index) in leaves" :key="index"
+    :position="[leaf.position[0] * plant.size, leaf.position[1] * plant.size, leaf.position[2] * plant.size]" 
+    :rotation="leaf.rotation" :scale="[plant.size, plant.size, plant.size]">
+    <TresPlaneGeometry :args="[0.4, 0.4]" />
+    <TresMeshBasicMaterial color="#3f9f4f" />
+  </TresMesh>
+
+  <!-- Ползучие побеги для взрослого растения -->
+  <TresMesh v-if="plant.growthStage >= 4" v-for="(runner, index) in runners" :key="index"
+    :position="[runner.position[0] * plant.size, runner.position[1] * plant.size, runner.position[2] * plant.size]" 
+    :rotation="runner.rotation" :scale="[plant.size, plant.size, plant.size]">
+    <TresCylinderGeometry :args="[0.02, 0.02, 0.5, 6]" />
+    <TresMeshBasicMaterial color="#2f6f3f" />
+  </TresMesh>
+
+  <!-- Цветок -->
+  <TresMesh v-if="plant.growthStage === 5" :position="[0, 0, 0.65]" :scale="[plant.size, plant.size, plant.size]">
+    <TresSphereGeometry :args="[0.1, 8, 8]" />
+    <TresMeshBasicMaterial color="#e6b8d2" />
+  </TresMesh>
 </template>

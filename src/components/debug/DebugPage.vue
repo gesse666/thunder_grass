@@ -12,6 +12,17 @@ const testPlants = reactive({
   clover: new Clover(0)
 });
 
+// Названия стадий развития
+const growthStageNames = {
+  0: 'Укоренение',
+  1: 'Росток',
+  2: 'Растение',
+  3: 'Бутон',
+  4: 'Цветение',
+  5: 'Плодоношение',
+  6: 'Полностью созревшее растение'
+};
+
 // Состояние отладки
 const debugState = reactive({
   selectedPlant: 'dandelion',
@@ -41,7 +52,7 @@ plantFolder.addBinding(debugState, 'selectedPlant', {
 const growthFolder = pane.addFolder({ title: 'Параметры роста' });
 growthFolder.addBinding(debugState, 'growthStage', {
   min: 0,
-  max: 5,
+  max: 6,
   step: 1
 });
 
@@ -66,7 +77,7 @@ sceneFolder.addBinding(debugState, 'lightIntensity', {
 // Кнопки управления
 const controlsFolder = pane.addFolder({ title: 'Управление' });
 controlsFolder.addButton({ title: 'Следующая стадия' }).on('click', () => {
-  if (debugState.growthStage < 5) {
+  if (debugState.growthStage < 6) {
     debugState.growthStage++;
   }
 });
@@ -101,6 +112,7 @@ const plantInfo = computed(() => {
     type: plant.type,
     growthStage: plant.growthStage,
     maxGrowthStage: plant.maxGrowthStage,
+    growthStageName: growthStageNames[plant.growthStage] || 'Неизвестно',
     size: plant.size,
     isFullyGrown: plant.isFullyGrown(),
     heightOffset: plant.getHeightOffset(),
@@ -118,6 +130,7 @@ const plantInfo = computed(() => {
         <h3>Текущее растение:</h3>
         <p><strong>Тип:</strong> {{ plantInfo.type }}</p>
         <p><strong>Стадия роста:</strong> {{ plantInfo.growthStage }} / {{ plantInfo.maxGrowthStage }}</p>
+        <p><strong>Название стадии:</strong> {{ plantInfo.growthStageName }}</p>
         <p><strong>Размер:</strong> {{ plantInfo.size.toFixed(1) }}</p>
         <p><strong>Полностью выросло:</strong> {{ plantInfo.isFullyGrown ? 'Да' : 'Нет' }}</p>
         <p><strong>Высота смещения:</strong> {{ plantInfo.heightOffset.toFixed(2) }}</p>

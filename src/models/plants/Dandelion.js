@@ -3,14 +3,15 @@ import Plant from './Plant.js';
 export default class Dandelion extends Plant {
     constructor(growthStage = 0) {
         super('dandelion', growthStage);
-        this.maxGrowthStage = 5;
+        this.maxGrowthStage = 6;
         this.growthRates = {
-            0: 0.1,  // Семя
-            1: 0.2,  // Ростки
-            2: 0.3,  // Молодое растение
-            3: 0.5,  // Бутон
-            4: 0.7,  // Цветок
-            5: 0.7   // Плод
+            0: 0.1,  // Укоренение
+            1: 0.2,  // Росток
+            2: 0.3,  // Растение
+            3: 0.4,  // Бутон
+            4: 0.6,  // Цветение
+            5: 0.7,  // Плодоношение
+            6: 0.8   // Полностью созревшее растение
         };
     }
 

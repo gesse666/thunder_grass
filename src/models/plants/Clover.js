@@ -3,14 +3,15 @@ import Plant from './Plant.js';
 export default class Clover extends Plant {
     constructor(growthStage = 0) {
         super('clover', growthStage);
-        this.maxGrowthStage = 5;
+        this.maxGrowthStage = 6;
         this.growthRates = {
-            0: 0,    // Семя
-            1: 0.1,  // Ростки
-            2: 0.2,  // Молодое растение
-            3: 0.3,  // Взрослое растение
-            4: 0.3,  // С ползучими побегами
-            5: 0.65  // Цветок
+            0: 0,    // Укоренение
+            1: 0.1,  // Росток
+            2: 0.2,  // Растение
+            3: 0.3,  // Бутон
+            4: 0.4,  // Цветение
+            5: 0.5,  // Плодоношение
+            6: 0.65  // Полностью созревшее растение
         };
     }
 

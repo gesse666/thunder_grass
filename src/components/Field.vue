@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import Plant from './Plant.vue';
+import { Plant } from './plants';
 import * as THREE from 'three'; // Импортируем THREE для создания геометрии линий
 
 const props = defineProps({

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { reactive, computed } from 'vue';
 import { useFieldStore } from './fieldStore';
 import { usePlayerStore } from './playerStore';
-import Plant from '../models/Plant';
+import { Dandelion, Clover } from '../models/plants';
 import {ref} from "vue";
 
 export const useGameStore = defineStore('gameStore', () => {
@@ -23,13 +23,25 @@ export const useGameStore = defineStore('gameStore', () => {
         turnsInRound = 0; // Сбрасываем счётчик ходов
     };
 
+    // Создание растения по типу
+    const createPlant = (plantType) => {
+        switch (plantType) {
+            case 'dandelion':
+                return new Dandelion();
+            case 'clover':
+                return new Clover();
+            default:
+                throw new Error(`Неизвестный тип растения: ${plantType}`);
+        }
+    };
+
     // Посадка растения
     const plantSeed = (fieldId, plantType) => {
         const currentPlayer = playerStore.getCurrentPlayer();
         if (currentPlayer && !currentPlayer.planted) { // Проверяем флаг planted
             const field = fieldStore.fields.find((f) => f.id === fieldId);
             if (field && !field.plant) {
-                field.plant = reactive(new Plant(plantType));
+                field.plant = reactive(createPlant(plantType));
                 field.playerId = currentPlayer.id;
                 // field.color = '#8B4513';
 

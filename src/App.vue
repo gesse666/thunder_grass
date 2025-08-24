@@ -6,10 +6,8 @@ import * as Tweakpane from 'tweakpane';
 import { useGameStore } from './stores/gameStore.js';
 import { useFieldStore } from './stores/fieldStore.js';
 import Field from './components/Field.vue';
-import InfoPanel from './components/InfoPanel.vue';
-import FieldInfoPanel from './components/FieldInfoPanel.vue';
-import Navigation from './components/Navigation.vue';
-import DebugPage from './components/DebugPage.vue';
+import { InfoPanel, FieldInfoPanel, Navigation } from './components/ui';
+import DebugPage from './components/debug/DebugPage.vue';
 
 const fieldStore = useFieldStore();
 const gameStore = useGameStore();

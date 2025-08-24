@@ -19,25 +19,25 @@ const runners = ref([
 
 <template>
   <!-- Семя -->
-  <TresMesh v-if="plant.growthStage === 0" :position="[0, 0, 0.1]" :scale="[0.1, 0.1, 0.1]">
+  <TresMesh v-if="plant.growthStage === 0" :position="[0, 0, 0]" :scale="[0.1, 0.1, 0.1]">
     <TresSphereGeometry />
     <TresMeshBasicMaterial color="brown" />
   </TresMesh>
 
   <!-- Ростки -->
-  <TresMesh v-if="plant.growthStage === 1" :position="[0, 0, 0.1]" :scale="[plant.size, plant.size, plant.size]">
+  <TresMesh v-if="plant.growthStage === 1" :position="[0, 0.1, 0]" :scale="[plant.size, plant.size, plant.size]">
     <TresCylinderGeometry :args="[0.02, 0.02, 0.2, 8]" />
     <TresMeshBasicMaterial color="#2f6f3f" />
   </TresMesh>
 
   <!-- Молодое растение -->
-  <TresMesh v-if="plant.growthStage === 2" :position="[0, 0, 0.2]" :scale="[plant.size, plant.size, plant.size]">
+  <TresMesh v-if="plant.growthStage === 2" :position="[0, 0.2, 0]" :scale="[plant.size, plant.size, plant.size]">
     <TresCylinderGeometry :args="[0.03, 0.03, 0.4, 8]" />
     <TresMeshBasicMaterial color="#2f6f3f" />
   </TresMesh>
 
   <!-- Взрослое растение со стеблем -->
-  <TresMesh v-if="plant.growthStage >= 3" :position="[0, 0, 0.3]" :scale="[plant.size, plant.size, plant.size]">
+  <TresMesh v-if="plant.growthStage >= 3" :position="[0, 0.3, 0]" :scale="[plant.size, plant.size, plant.size]">
     <TresCylinderGeometry :args="[0.05, 0.05, 0.6, 8]" />
     <TresMeshBasicMaterial color="#2f6f3f" />
   </TresMesh>
@@ -59,7 +59,7 @@ const runners = ref([
   </TresMesh>
 
   <!-- Цветок -->
-  <TresMesh v-if="plant.growthStage === 5" :position="[0, 0, 0.65]" :scale="[plant.size, plant.size, plant.size]">
+  <TresMesh v-if="plant.growthStage === 5" :position="[0, 0.65, 0]" :scale="[plant.size, plant.size, plant.size]">
     <TresSphereGeometry :args="[0.1, 8, 8]" />
     <TresMeshBasicMaterial color="#e6b8d2" />
   </TresMesh>

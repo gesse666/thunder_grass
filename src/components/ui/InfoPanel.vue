@@ -1,7 +1,7 @@
 <!-- components/InfoPanel.vue -->
 <script setup lang="js">
 import { computed, ref } from 'vue';
-import { useGameStore } from '../stores/gameStore.js';
+import { useGameStore } from '../../stores/gameStore.js';
 
 const gameStore = useGameStore();
 
@@ -54,7 +54,7 @@ const handlePlantTypeChange = (type) => {
   position: absolute;
   z-index: 10;
   color: black;
-  top: 10px;
+  top: 120px;
   left: 10px;
   background: rgba(255, 255, 255, 0.8);
   padding: 10px;

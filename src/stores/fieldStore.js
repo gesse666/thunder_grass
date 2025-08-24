@@ -1,9 +1,8 @@
 // fieldStore.js
 import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
-import { Field } from '../models/Field';
-import Plant from '../models/Plant';
-import { SoilTypes} from "../models/SoilTypes.js";
+import { Field, SoilTypes } from '../models/game';
+import { Dandelion, Clover } from '../models/plants';
 
 // Функция для случайного выбора типа почвы с учётом вероятностей
 const getRandomSoilType = () => {
@@ -13,6 +12,18 @@ const getRandomSoilType = () => {
     if (rand < 75) return 'loamy'; // 25% шанс суглинистой
     if (rand < 90) return 'peat';  // 15% шанс торфяной
     return 'silty';                // 10% шанс илистой
+};
+
+// Создание растения по типу
+const createPlant = (plantType) => {
+    switch (plantType) {
+        case 'dandelion':
+            return new Dandelion();
+        case 'clover':
+            return new Clover();
+        default:
+            throw new Error(`Неизвестный тип растения: ${plantType}`);
+    }
 };
 
 export const useFieldStore = defineStore('fieldStore', () => {
@@ -53,7 +64,7 @@ export const useFieldStore = defineStore('fieldStore', () => {
     const plantSeed = (fieldId, plantType, playerId) => {
         const field = fields.find((f) => f.id === fieldId);
         if (field && !field.plant) {
-            field.plant = reactive(new Plant(plantType));
+            field.plant = reactive(createPlant(plantType));
             field.playerId = playerId;
             field.color = field.calculateColor();
         }

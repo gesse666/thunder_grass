@@ -13,7 +13,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useGameStore } from '../stores/gameStore.js';
+import { useGameStore } from '../../stores/gameStore.js';
 
 const props = defineProps({
   hoveredField: Object, // Подсвеченное поле
@@ -47,7 +47,7 @@ const soilColor = computed(() => {
   position: absolute;
   z-index: 10;
   color: black;
-  top: 10px;
+  top: 120px;
   right: 10px; /* Справа, чтобы не перекрывать InfoPanel */
   background: rgba(255, 255, 255, 0.8);
   padding: 10px;

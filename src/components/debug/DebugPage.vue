@@ -3,9 +3,8 @@ import { ref, reactive, computed } from 'vue';
 import { TresCanvas } from '@tresjs/core';
 import { OrbitControls } from '@tresjs/cientos';
 import * as Tweakpane from 'tweakpane';
-import Dandelion from '../models/Dandelion.js';
-import Clover from '../models/Clover.js';
-import PlantComponent from './Plant.vue';
+import { Dandelion, Clover } from '../../models/plants';
+import { Plant as PlantComponent } from '../plants';
 
 // Создаем тестовые растения
 const testPlants = reactive({

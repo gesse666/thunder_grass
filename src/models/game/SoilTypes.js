@@ -1,8 +1,8 @@
-// soilTypes.js
 export const SoilTypes = {
-    sandy: { color: '#F4A460', fertilityBase: 30, moistureBase: 20 }, // Песчаная
-    clay: { color: '#A0522D', fertilityBase: 50, moistureBase: 70 },  // Глинистая
-    loamy: { color: '#228B22', fertilityBase: 70, moistureBase: 50 }, // Суглинистая
-    peat: { color: '#4A2F27', fertilityBase: 60, moistureBase: 80 },  // Торфяная
-    silty: { color: '#8B7765', fertilityBase: 65, moistureBase: 60 }  // Илистая
+    sandy: { color: '#D2B48C', moistureLevel: 0.2, humusLevel: 0.2 },  // Песчаная почва
+    clay: { color: '#A0522D', moistureLevel: 0.7, humusLevel: 0.4 },  // Глинистая почва
+    loamy: { color: '#8B6B4E', moistureLevel: 0.5, humusLevel: 0.6 },  // Суглинистая почва
+    peat: { color: '#3E2F2F', moistureLevel: 0.8, humusLevel: 0.8 },  // Торфяная почва
+    silty: { color: '#7B6F5E', moistureLevel: 0.6, humusLevel: 0.5 },  // Илистая почва
+    black: { color: '#1B1B0F', moistureLevel: 0.65, humusLevel: 0.9 }  // Чернозём
 };

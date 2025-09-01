@@ -2,7 +2,7 @@
 import {SoilTypes} from "./SoilTypes.js";
 
 export class Field {
-    constructor(id, fertility, moisture, soilType, position, plant = null, playerId = null) {
+    constructor(id, fertility, moisture, soilType, humusLevel, position, plant = null, playerId = null) {
         this.id = id;
         this.fertility = fertility; // Принимаем плодородие напрямую
         this.moisture = moisture;
@@ -14,8 +14,6 @@ export class Field {
         this.color = this.calculateColor();
         this.borderColor = this.calculateBorderColor();
         this.hasBorder = !!this.playerId;
-
-        console.log('Field created:', { id, soilType, fertility: this.fertility });
     }
 
     calculateColor() {

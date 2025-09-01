@@ -1,24 +1,105 @@
 // models/Plant.js
 export default class Plant {
     constructor(type, growthStage = 0) {
-        this.type = type; // Тип растения
-        this.growthStage = growthStage; // Стадия роста
-        this.maxGrowthStage = 6; // Максимальная стадия роста
-        this.size = 0.9; // Начальный размер семени
+        this.type = type;
+        this.growthStage = growthStage;
+        this.maxGrowthStage = 5;
+        this.size = 0.9;
+
+        // Базовые стадии с затратами ресурсов
+        this.stages = [
+            { name: 'Укоренение семени', humusCost: 1, waterCost: 5 },
+            { name: 'Росток', humusCost: 4, waterCost: 10 },
+            { name: 'Растение', humusCost: 6, waterCost: 15 },
+            { name: 'Бутон', humusCost: 8, waterCost: 20 },
+            { name: 'Цветение', humusCost: 10, waterCost: 25 },
+            { name: 'Плодоношение', humusCost: 4, waterCost: 15 }
+        ];
+
+        // Базовая генерация ресурсов по стадиям
+        this.humusGeneration = {
+            0: 0,   // Семя не производит гумус
+            1: 1,   // Росток
+            2: 2,   // Растение
+            3: 3,   // Бутон
+            4: 4,   // Цветение
+            5: 2    // Плодоношение (снижение)
+        };
+
+        this.waterGeneration = {
+            0: 0,   // Семя не производит воду
+            1: 2,   // Росток
+            2: 3,   // Растение
+            3: 4,   // Бутон
+            4: 5,   // Цветение
+            5: 3    // Плодоношение (снижение)
+        };
     }
 
-    grow(modifier = 1.0) {
-        if (this.growthStage < this.maxGrowthStage) {
-            this.growthStage = Math.min(this.maxGrowthStage, this.growthStage + modifier);
-            this.size += 0.2; // Увеличиваем размер растения
+    // Проверяем, хватает ли ресурсов для следующего этапа
+    canGrow(availableHumus, availableWater) {
+        if (this.growthStage >= this.maxGrowthStage) {
+            return false;
         }
+
+        const nextStage = this.stages[this.growthStage];
+        return availableHumus >= nextStage.humusCost && availableWater >= nextStage.waterCost;
+    }
+
+    // Получаем затраты ресурсов для следующего этапа
+    getNextStageCosts() {
+        if (this.growthStage >= this.maxGrowthStage) {
+            return null;
+        }
+
+        const nextStage = this.stages[this.growthStage];
+        return {
+            humus: nextStage.humusCost,
+            water: nextStage.waterCost,
+            stageName: nextStage.name
+        };
+    }
+
+    // Рост происходит только если есть достаточно ресурсов
+    grow(availableHumus, availableWater) {
+        if (!this.canGrow(availableHumus, availableWater)) {
+            return {
+                success: false,
+                reason: 'Недостаточно ресурсов для роста',
+                required: this.getNextStageCosts()
+            };
+        }
+
+        const costs = this.getNextStageCosts();
+        this.growthStage++;
+        this.size += 0.2;
+
+        return {
+            success: true,
+            costsUsed: costs,
+            newStage: this.getCurrentStageName()
+        };
+    }
+
+    getCurrentStageName() {
+        if (this.growthStage === 0) return 'Семя';
+        return this.stages[this.growthStage - 1].name;
     }
 
     isFullyGrown() {
-        return this.growthStage === this.maxGrowthStage;
+        return this.growthStage >= this.maxGrowthStage;
     }
 
-    // Абстрактные методы, которые должны быть реализованы в наследниках
+    // Методы для генерации ресурсов
+    getHumusGeneration() {
+        return this.humusGeneration[this.growthStage] || 0;
+    }
+
+    getWaterGeneration() {
+        return this.waterGeneration[this.growthStage] || 0;
+    }
+
+    // Абстрактные методы
     getHeightOffset() {
         throw new Error('getHeightOffset() должен быть реализован в наследнике');
     }

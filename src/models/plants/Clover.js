@@ -4,6 +4,7 @@ export default class Clover extends Plant {
     constructor(growthStage = 0) {
         super('clover', growthStage);
         this.maxGrowthStage = 6;
+
         this.growthRates = {
             0: 0,    // Укоренение
             1: 0.1,  // Росток
@@ -13,13 +14,6 @@ export default class Clover extends Plant {
             5: 0.5,  // Плодоношение
             6: 0.65  // Полностью созревшее растение
         };
-    }
-
-    grow(modifier = 1.0) {
-        if (this.growthStage < this.maxGrowthStage) {
-            this.growthStage = Math.min(this.maxGrowthStage, this.growthStage + modifier);
-            this.size += 0.2;
-        }
     }
 
     getHeightOffset() {

@@ -2,11 +2,11 @@
 import {SoilTypes} from "./SoilTypes.js";
 
 export class Field {
-    constructor(id, fertility, moisture, soilType, humusLevel, position, plant = null, playerId = null) {
+    constructor(id, moisture, soilType, humusLevel, position, plant = null, playerId = null) {
         this.id = id;
-        this.fertility = fertility; // Принимаем плодородие напрямую
         this.moisture = moisture;
         this.soilType = soilType;
+        this.humusLevel = humusLevel;
         this.position = position;
         this.plant = plant;
         this.playerId = playerId;
@@ -17,6 +17,8 @@ export class Field {
     }
 
     calculateColor() {
+        console.log('this.soilType', this.soilType);
+        console.log('SoilTypes[this.soilType]', SoilTypes[this.soilType]);
         return SoilTypes[this.soilType].color; // Цвет из SoilTypes
     }
 
@@ -32,10 +34,5 @@ export class Field {
     updateMoisture() {
         // Предполагаемая логика обновления влажности
         this.moisture = Math.max(0, Math.min(100, this.moisture + (Math.random() * 10 - 5)));
-    }
-
-    getGrowthModifier() {
-        // Пример модификатора роста на основе плодородия и влажности
-        return (this.fertility / 100) * (this.moisture / 100);
     }
 }

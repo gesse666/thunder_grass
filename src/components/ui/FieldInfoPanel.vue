@@ -3,7 +3,7 @@
   <div v-if="fieldInfo" class="field-info-panel">
     <h3>Информация о поле</h3>
     <p>Тип почвы: <span :style="{ color: soilColor }">{{ fieldInfo.soilType }}</span></p>
-    <p>Плодородие: {{ fieldInfo.fertility }}</p>
+    <p>Уровееь гумуса: {{ fieldInfo.humusLevel }}</p>
     <p>Влажность: {{ fieldInfo.moisture }}%</p>
     <p>Растение: {{ fieldInfo.plant }}</p>
     <p>Стадия роста: {{ fieldInfo.growthStage }}</p>
@@ -27,7 +27,7 @@ const fieldInfo = computed(() => {
   const field = props.hoveredField;
   return {
     soilType: field.soilType,
-    fertility: field.fertility.toFixed(1),
+    humusLevel: field.humusLevel,
     moisture: field.moisture.toFixed(1),
     plant: field.plant ? field.plant.type : 'Нет растения',
     growthStage: field.plant ? field.plant.growthStage.toFixed(2) : '—',

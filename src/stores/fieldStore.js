@@ -52,12 +52,9 @@ export const useFieldStore = defineStore('fieldStore', () => {
 
             // Базовая влажность на основе moistureLevel с небольшим разбросом
             const baseMoisture = (moistureLevel * 100) + (Math.random() * 10 - 5);
-            // Базовая плодородность теперь зависит только от гумуса
-            const baseFertility = (humusLevel * 100) + (Math.random() * 10 - 5);
 
             return reactive(new Field(
                 id++,
-                Math.max(0, Math.min(100, baseFertility)), // Плодородность 0-100
                 Math.max(0, Math.min(100, baseMoisture)),  // Влажность 0-100
                 soilType,
                 humusLevel,
@@ -200,7 +197,6 @@ export const useFieldStore = defineStore('fieldStore', () => {
             humusLevel: SoilTypes[field.soilType].humusLevel,
             moistureLevel: SoilTypes[field.soilType].moistureLevel,
             currentMoisture: field.moisture,
-            fertility: field.fertility,
             plant: field.plant ? {
                 type: field.plant.type,
                 stage: field.plant.growthStage,

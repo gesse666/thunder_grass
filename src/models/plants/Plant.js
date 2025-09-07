@@ -17,7 +17,7 @@ export default class Plant {
         ];
 
         // Базовая генерация ресурсов по стадиям
-        this.humusGeneration = {
+        this.humusMining = {
             0: 0,   // Семя не производит гумус
             1: 1,   // Росток
             2: 2,   // Растение
@@ -26,7 +26,7 @@ export default class Plant {
             5: 2    // Плодоношение (снижение)
         };
 
-        this.waterGeneration = {
+        this.waterMining = {
             0: 0,   // Семя не производит воду
             1: 2,   // Росток
             2: 3,   // Растение
@@ -91,12 +91,12 @@ export default class Plant {
     }
 
     // Методы для генерации ресурсов
-    getHumusGeneration() {
-        return this.humusGeneration[this.growthStage] || 0;
+    getHumusMining() {
+        return this.humusMining[this.growthStage] || 0;
     }
 
-    getWaterGeneration() {
-        return this.waterGeneration[this.growthStage] || 0;
+    getWaterMining() {
+        return this.waterMining[this.growthStage] || 0;
     }
 
     // Абстрактные методы
@@ -107,5 +107,20 @@ export default class Plant {
     getPosition() {
         const heightOffset = this.getHeightOffset() * this.size;
         return [0, heightOffset, 0.1];
+    }
+
+    // Базовый метод - по умолчанию способности нет
+    isAbilityReady() {
+        return false;
+    }
+
+    // Базовое название способности
+    getAbilityName() {
+        return 'Способность';
+    }
+
+    useAbility(/* дополнительные параметры */) {
+        // По умолчанию ничего не делает
+        return { success: false, reason: 'У этого растения нет особой способности' };
     }
 }

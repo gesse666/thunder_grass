@@ -24,4 +24,26 @@ export default class Clover extends Plant {
         const heightOffset = this.getHeightOffset() * this.size;
         return [0, heightOffset, 0.1];
     }
+
+    // Клевер готов выпускать столоны на стадии растения и выше
+    isAbilityReady() {
+        return this.growthStage >= 2;
+    }
+
+    // Название способности клевера
+    getAbilityName() {
+        return 'Выпустить столоны';
+    }
+
+    // Реализация способности клевера
+    useAbility(fields, field, playerId) {
+        if (!this.isAbilityReady()) {
+            return { success: false, reason: 'Столоны доступны со стадии растения' };
+        }
+
+        let stolonsCreated = 0;
+        // Логика создания столонов...
+
+        return { success: true, stolonsCreated };
+    }
 }

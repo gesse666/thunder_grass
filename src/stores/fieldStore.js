@@ -130,11 +130,11 @@ export const useFieldStore = defineStore('fieldStore', () => {
                 initializePlayer(playerId);
 
                 // Генерируем ресурсы от растения с учетом почвы
-                const humusGeneration = calculateHumusGeneration(field);
-                const waterGeneration = calculateWaterGeneration(field);
+                const humusMining = calculateHumusGeneration(field);
+                const waterMining = calculateWaterGeneration(field);
 
-                playerResources[playerId].humus += humusGeneration;
-                playerResources[playerId].water += waterGeneration;
+                playerResources[playerId].humus += humusMining;
+                playerResources[playerId].water += waterMining;
 
                 // Попытка автоматического роста (можно отключить для ручного управления)
                 if (!field.plant.isFullyGrown()) {
@@ -152,7 +152,7 @@ export const useFieldStore = defineStore('fieldStore', () => {
 
     const calculateHumusGeneration = (field) => {
         const soilMultiplier = SoilTypes[field.soilType].humusLevel;
-        const baseGeneration = field.plant.getHumusGeneration();
+        const baseGeneration = field.plant.getHumusMining();
         return Math.round(baseGeneration * soilMultiplier);
     };
 
@@ -163,8 +163,18 @@ export const useFieldStore = defineStore('fieldStore', () => {
         // Коэффициент эффективности: чем ближе текущая влажность к потенциалу почвы, тем лучше
         const efficiencyMultiplier = Math.min(currentMoisture / soilMoistureCapacity, 1.2);
 
-        const baseGeneration = field.plant.getWaterGeneration();
+        const baseGeneration = field.plant.getWaterMining();
         return Math.round(baseGeneration * efficiencyMultiplier);
+    };
+
+    // Вызов экстра-способности растения (универсальный для любого растения)
+    const usePlantAbility = (fieldId, playerId) => {
+        const field = fields.find(f => f.id === fieldId);
+        if (!field || !field.plant || field.playerId !== playerId) {
+            return { success: false, reason: 'Неподходящее поле или растение не принадлежит игроку' };
+        }
+        // Параметры: все поля, выбранное поле, идентификатор игрока (дополняйте при необходимости)
+        return field.plant.useAbility(fields, field, playerId);
     };
 
     const getPlayerResources = (playerId) => {
@@ -203,8 +213,8 @@ export const useFieldStore = defineStore('fieldStore', () => {
                 stageName: field.plant.getCurrentStageName(),
                 isFullyGrown: field.plant.isFullyGrown(),
                 nextCosts: field.plant.getNextStageCosts(),
-                humusGeneration: field.plant.getHumusGeneration(),
-                waterGeneration: field.plant.getWaterGeneration()
+                humusMining: field.plant.getHumusMining(),
+                waterMining: field.plant.getWaterMining()
             } : null
         };
     };
@@ -218,6 +228,7 @@ export const useFieldStore = defineStore('fieldStore', () => {
         plantSeed,
         tryGrowPlant,
         growPlantsStep,
+        usePlantAbility,
         getPlayerResources,
         setHoveredField,
         clearHoveredField,

@@ -1,13 +1,40 @@
 <!-- components/InfoPanel.vue -->
 <script setup lang="js">
 import { computed, ref } from 'vue';
+
 import { useGameStore } from '../../stores/gameStore.js';
+import { useFieldStore} from "../../stores/fieldStore.js";
 
 const gameStore = useGameStore();
+const fieldStore = useFieldStore();
 
 // Текущий игрок
 const currentPlayer = computed(() => gameStore.getCurrentPlayer());
 const selectedPlantType = ref('dandelion');
+
+// Получаем список растений текущего игрока
+const playerPlants = computed(() => {
+  const playerId = currentPlayer.value.id;
+  return fieldStore.fields
+      .filter(field => field.plant && field.playerId === playerId)
+      .map(field => ({
+        fieldId: field.id,
+        plant: field.plant,
+        soilType: field.soilType,
+        position: field.position
+      }));
+});
+
+// Запуск экстра-способности растения
+const usePlantAbility = async (fieldId) => {
+  const result = fieldStore.usePlantAbility(fieldId, currentPlayer.value.id);
+
+  if (result.success) {
+    console.log('Способность использована успешно:', result);
+  } else {
+    console.warn(`Способность недоступна: ${result.reason}`);
+  }
+};
 
 const emit = defineEmits(['next-step', 'plant-type-change']);
 
@@ -44,8 +71,47 @@ const handlePlantTypeChange = (type) => {
         </button>
       </div>
     </div>
-    
+
+    <div class="plants-list" v-if="playerPlants.length > 0">
+      <h4>Ваши растения:</h4>
+      <div class="plant-items">
+        <div
+            v-for="plantData in playerPlants"
+            :key="plantData.fieldId"
+            class="plant-item"
+        >
+          <div class="plant-info">
+            <span class="plant-icon">
+              {{ plantData.plant.type === 'dandelion' ? '🌼' : '☘️' }}
+            </span>
+            <div class="plant-details">
+              <div class="plant-name">
+                {{ plantData.plant.type === 'dandelion' ? 'Одуванчик' : 'Клевер' }}
+              </div>
+              <div class="plant-stage">
+                {{ plantData.plant.getCurrentStageName() }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Кнопка экстра-способности - теперь просто вызываем метод растения -->
+          <button
+              v-if="plantData.plant.isAbilityReady()"
+              class="ability-button"
+              @click="usePlantAbility(plantData.fieldId)"
+              :title="`Использовать способность: ${plantData.plant.getAbilityName()}`"
+          >
+            {{ plantData.plant.getAbilityName() }}
+          </button>
+          <span v-else class="ability-disabled">
+            Способность недоступна
+          </span>
+        </div>
+      </div>
+
     <button @click="$emit('next-step')">Следующий шаг</button>
+  </div>
+
   </div>
 </template>
 

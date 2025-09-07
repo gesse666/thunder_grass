@@ -17,7 +17,7 @@ export default class Dandelion extends Plant {
         ];
 
         // Одуванчик производит меньше гумуса, но быстрее размножается
-        this.humusGeneration = {
+        this.humusMining = {
             0: 0,   // Семя
             1: 0.8, // Росток (меньше клевера)
             2: 1.8, // Растение
@@ -26,7 +26,7 @@ export default class Dandelion extends Plant {
             5: 2.0  // Плодоношение
         };
 
-        this.waterGeneration = {
+        this.waterMining = {
             0: 0,   // Семя
             1: 2.5, // Росток (лучше сохраняет влагу)
             2: 3.5, // Растение
@@ -53,5 +53,37 @@ export default class Dandelion extends Plant {
     getPosition() {
         const heightOffset = this.getHeightOffset() * this.size;
         return [0, heightOffset, 0.1];
+    }
+
+    // Одуванчик готов рассеивать семена на стадии плодоношения
+    isAbilityReady() {
+        return this.growthStage === 5;
+    }
+
+    // Название способности одуванчика
+    getAbilityName() {
+        return 'Рассеять семена';
+    }
+
+    // Реализация способности одуванчика
+    useAbility(fields, field, playerId) {
+        if (!this.isAbilityReady()) {
+            return { success: false, reason: 'Семена доступны только на стадии плодоношения' };
+        }
+
+        let seedsPlanted = 0;
+        fields.forEach(other => {
+            const dx = Math.abs(other.position[0] - field.position[0]);
+            const dz = Math.abs(other.position[2] - field.position[2]);
+            if ((dx + dz <= 1) && !other.plant) {
+                other.plant = new Dandelion();
+                other.playerId = playerId;
+                other.color = other.calculateColor();
+                other.plant.growthStage = 1;
+                seedsPlanted += 1;
+            }
+        });
+
+        return { success: true, seedsPlanted };
     }
 }
